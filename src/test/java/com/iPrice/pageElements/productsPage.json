@@ -1,0 +1,12 @@
+{
+"findBestDealsOnline": {
+  "storeName": "div.kF > amp-carousel > div > div > a",
+  "stores": "div.kF > amp-carousel > div > div > a > amp-img > img",
+  "next": "div.kF > amp-carousel > div > div > div[title='Next item in carousel (2 of 20)']",
+  "prev": "div.kF > amp-carousel > div > div > div[title='Previous item in carousel (1 of 20)']"
+},
+  "topTrendingProducts": {
+    "products": "div[class='C I l eU'] > amp-carousel > div > div > a > span",
+    "checkLinkAttribute": "div[class='C I l eU'] > amp-carousel > div > div > a"
+  }
+}

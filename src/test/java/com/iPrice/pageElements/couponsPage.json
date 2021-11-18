@@ -1,0 +1,17 @@
+{
+  "couponsTab": "#top-nav > div > a:nth-child(2)",
+  "topStores": {
+    "allStores": "//a[text()='See All Stores >']",
+    "storeTile": "div[data-uat='coupon-store-item']",
+    "storeName": "div[data-uat='coupon-store-item'] > p",
+    "storeBrandName": "div[data-uat='coupon-store-item'] > div > a > amp-img",
+    "storeURL": "div[data-uat='coupon-store-item'] > div > a"
+  },
+  "storeDetails": {
+    "breadcrumb" : "#breadcrumb-desktop",
+    "loadedPage": "#breadcrumb-desktop > li:nth-child(3) > span",
+    "allStorePage": "#breadcrumb-desktop > li:nth-child(2) > a",
+    "loadedPageHeader": "#hidden-ellipsis > div > div > h1",
+    "detailsPageLogo": "#coupon-header > div:nth-child(2) > amp-img"
+  }
+}

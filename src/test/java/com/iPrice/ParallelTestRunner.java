@@ -17,17 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParallelTestRunner {
     @Test
-    void parallelExecutionAPI() throws IOException {
+    void testSuiteRunner() throws IOException {
         File resDir = new File("target/karate-reports");
         if(resDir.exists()){
             FileUtils.deleteDirectory(resDir);
         }
         Results results = Runner.path("classpath:com/iPrice/uiTest").tags("~@ignore").outputCucumberJson(true).parallel(1);
-        generateReportAPI(results.getReportDir());
+        generateReport(results.getReportDir());
         assertEquals(0, results.getFailCount(), results.getErrorMessages());
     }
 
-    public void generateReportAPI(String karateOutputPath)  {
+    public void generateReport(String karateOutputPath)  {
         Collection<File> jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[] {"json"}, true);
         List<String> jsonPaths = new ArrayList(jsonFiles.size());
         jsonFiles.forEach(file -> jsonPaths.add(file.getAbsolutePath()));

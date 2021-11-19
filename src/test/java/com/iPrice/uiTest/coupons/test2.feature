@@ -3,9 +3,9 @@ Feature: Navigate to iPrice Malaysia Coupons (https://iprice.my/coupons/) websit
   some automated test based on the following.
 
   Background:
-#      take screenshot on failure
+#   take screenshot on failure
     * configure afterScenario = function(){ if (karate.scenario.error) driver.screenshotFull()}
-#      Invoke driver
+#   Invoke driver
 #    * call read('classpath:com/iPrice/uiTest/util/initializeDriver.feature@name=driverStart')
     * def couponsPage = read('classpath:com/iPrice/pageElements/couponsPage.json')
 
@@ -19,6 +19,34 @@ Feature: Navigate to iPrice Malaysia Coupons (https://iprice.my/coupons/) websit
     * def storeTiles = locateAll(couponsPage.topStores.storeTile,enabled)
     * print 'enabled stores are -',karate.sizeOf(storeTiles)
     * match karate.sizeOf(storeTiles) == 82
+
+  Scenario: Make sure that list of stores in Top Stores is redirected to their proper store url
+    * call read('classpath:com/iPrice/uiTest/util/initializeDriver.feature@name=driverStart')
+    * submit().click(couponsPage.couponsTab)
+    * waitUntil("document.readyState === 'complete'")
+    * waitFor(couponsPage.topStores.allStores).click()
+    * waitUntil("document.readyState === 'complete'")
+    * def storeTiles = locateAll(couponsPage.topStores.storeTile)
+    * def totalStores = karate.sizeOf(storeTiles)
+    * print 'enabled stores are -',totalStores
+    * def loopCount = karate.repeat(totalStores, commonUtil.returnCount)
+    * def storeBrandNameList = scriptAll(couponsPage.topStores.storeBrandName,'_.getAttribute("title")')
+    * print 'store Brand names are -',storeBrandNameList
+    * call read('classpath:com/iPrice/uiTest/coupons/test2.feature@name=validateStoreDetailsPage') loopCount
+
+  @ignore
+  @name=validateStoreDetailsPage
+  Scenario: validate the store locator page
+    * def storeTiles = locateAll(couponsPage.topStores.storeURL)
+    * storeTiles[val].click()
+    * print 'loop counter value is - ', val
+    * print 'checking for store that clicked - ', storeBrandNameList[val]
+    * waitUntil("document.querySelector('#breadcrumb-desktop') != null")
+    * def storeBrandNameDetailsPage = script(couponsPage.storeDetails.detailsPageLogo,'_.getAttribute("alt")')
+    * print 'store names are -',storeBrandNameDetailsPage
+    * match storeBrandNameDetailsPage == storeBrandNameList[val]
+#    * match (text(couponsPage.storeDetails.loadedPageHeader).toLowerCase()) contains storeNameList[val].toLowerCase()
+    * submit().click(couponsPage.storeDetails.allStorePage)
 
     @ignore
   Scenario: Make sure that list of stores in Top Stores is redirected to their proper store url - method1
@@ -36,37 +64,4 @@ Feature: Navigate to iPrice Malaysia Coupons (https://iprice.my/coupons/) websit
     * def storesAvailable = commonUtil.getStores(storeUrlList)
     * print 'link containing store names in URL are -',storesAvailable
 #    * match storesAvailable contains storeListURL
-
-  Scenario: Make sure that list of stores in Top Stores is redirected to their proper store url
-    * call read('classpath:com/iPrice/uiTest/util/initializeDriver.feature@name=driverStart')
-    * submit().click(couponsPage.couponsTab)
-    * waitUntil("document.readyState === 'complete'")
-    * waitFor(couponsPage.topStores.allStores).click()
-    * waitUntil("document.readyState === 'complete'")
-    * def storeTiles = locateAll(couponsPage.topStores.storeTile)
-    * def totalStores = karate.sizeOf(storeTiles)
-    * print 'enabled stores are -',totalStores
-#    * def totalStores = 2
-    * def loopCount = karate.repeat(totalStores, commonUtil.returnCount)
-    * def storeNameList = scriptAll(couponsPage.topStores.storeName,'_.getAttribute("title")')
-    * print 'store names are -',storeNameList
-    * def storeBrandNameList = scriptAll(couponsPage.topStores.storeBrandName,'_.getAttribute("title")')
-    * print 'store names are -',storeBrandNameList
-    * call read('classpath:com/iPrice/uiTest/coupons/test2.feature@name=validateStoreDetailsPage') loopCount
-
-
-  @ignore
-  @name=validateStoreDetailsPage
-    Scenario: validate the store locator page
-#    * def storeNameList = scriptAll(couponsPage.topStores.storeName,'_.getAttribute("title")')
-#    * print 'store names are -',storeNameList
-    * def storeTiles = locateAll(couponsPage.topStores.storeURL)
-    * storeTiles[val].click()
-    * waitUntil("document.querySelector('#breadcrumb-desktop') != null")
-    * def storeBrandNameDetailsPage = script(couponsPage.storeDetails.detailsPageLogo,'_.getAttribute("alt")')
-    * print 'store names are -',storeBrandNameDetailsPage
-    * match storeBrandNameDetailsPage == storeBrandNameList[val]
-#    * match (text(couponsPage.storeDetails.loadedPageHeader).toLowerCase()) contains storeNameList[val].toLowerCase()
-    * waitFor(couponsPage.storeDetails.allStorePage).click()
-    * waitUntil("document.querySelector('#breadcrumb-desktop') == null")
 
